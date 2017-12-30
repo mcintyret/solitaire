@@ -6,6 +6,7 @@ import { Deck } from "./Deck";
 
 export interface GameBoardProps {
     game: GameState;
+    onDealFromDeck(): void;
 }
 
 export const GameBoard: React.SFC<GameBoardProps> = (props: GameBoardProps) => {
@@ -18,6 +19,7 @@ export const GameBoard: React.SFC<GameBoardProps> = (props: GameBoardProps) => {
                 <Deck 
                     card={deckFaceUp[deckFaceUp.length - 1]}
                     faceDownCards={deckFaceDown.length}
+                    onDealFromDeck={props.onDealFromDeck}
                 />
             </div>
             <div className="solitaire-game-main">

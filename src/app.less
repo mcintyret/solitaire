@@ -1,5 +1,76 @@
-@import "./components/Card.less";
-@import "./components/Deck.less";
-@import "./components/Stack.less";
-@import "./components/HomeBase.less";
-@import "./components/GameBoard-foo.less";
+@card-width: 100px;
+
+.solitaire-card {
+    border-radius: 5px;
+    width: @card-width;
+    min-width: @card-width;
+    max-width: @card-width;
+    height: 150px;
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+
+    &.-face-down {
+        background-color: blue;
+    }
+
+    &.-red {
+        color: red;
+    }
+
+    &.-black {
+        color: black;
+    }
+
+    &.-empty {
+        border: 2px solid white;
+        background-color: transparent;
+    }
+}
+
+.solitaire-deck {
+    display: flex;
+    justify-content: space-evenly;
+    
+    .solitaire-card {
+        margin-right: 15px;
+    }
+}
+
+.solitaire-game {
+    background-color: green;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    .solitaire-game-top {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .solitaire-game-main {
+        display: flex;
+        flex-direction: row;
+        margin-top: 30px;
+        justify-content: space-evenly;
+    }
+}
+
+.solitaire-home-base {
+    display: flex;
+    justify-content: space-evenly;
+
+    .solitaire-card {
+        margin-right: 15px;
+    }
+}
+
+.solitaire-stack {
+    display: flex;
+    flex-direction: column;
+
+    .solitaire-card {
+        position: relative;
+    }
+}

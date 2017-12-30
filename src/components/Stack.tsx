@@ -6,11 +6,15 @@ export interface StackProps {
     cards: Card[];
 }
 
-function renderCard(card: Card, faceDown: boolean) {
+const HEIGHT_OFFSET_PER_CARD = 110;
+
+function renderCard(card: Card, index: number, allCards: Card[]) {
     const key = `${card.suit}:${card.rank}`;
+    const faceDown = index !== allCards.length - 1;
+    const style = {top: HEIGHT_OFFSET_PER_CARD * -index}
     return faceDown ?
-        <FaceDownCard key={key}/> :
-        <CardElement key={key} {...card} />
+        <FaceDownCard key={key} style={style}/> :
+        <CardElement key={key} style={style} suit={card.suit} rank={card.rank} />
 }
 
 export const Stack: React.SFC<StackProps> = (props: StackProps) => {
@@ -19,7 +23,7 @@ export const Stack: React.SFC<StackProps> = (props: StackProps) => {
     return (
         <div className="solitaire-stack">
             {cards.length === 0 && <EmptyCard />}
-            {cards.map((card, index) => renderCard(card, index !== cards.length - 1))}
+            {cards.map(renderCard)}
         </div>
     );
 }

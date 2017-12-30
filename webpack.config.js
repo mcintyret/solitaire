@@ -24,7 +24,7 @@ const config = {
         filename: "bundle.js",
         path: path.resolve(__dirname, "build/solitaire"),
     },
-    devtool: IS_PRODUCTION ? false : false,
+    devtool: IS_PRODUCTION ? false : "source-map",
     module: {
         rules: [
             {

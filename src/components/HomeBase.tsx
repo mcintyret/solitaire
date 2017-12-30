@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Card } from "../model/Card";
-import { maybeRenderCard } from "./Card";
+import { renderCard } from "./Card";
 
 export interface HomeBaseProps {
     homeBase: Array<Card | undefined>
@@ -9,7 +9,7 @@ export interface HomeBaseProps {
 export const HomeBase: React.SFC<HomeBaseProps> = (props: HomeBaseProps) => {
     return (
         <div className="solitaire-home-base">
-            {props.homeBase.map(maybeRenderCard)}
+            {props.homeBase.map(renderCard)}
         </div>
     );
 }

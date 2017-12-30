@@ -4,6 +4,7 @@ import { AppState } from "../state/state";
 import { Dispatch } from "redux";
 import { NewGame } from "../actions/newGame";
 import { GameBoard } from "../components/GameBoard";
+import { DealFromDeck } from "../actions/dealFromDeck";
 
 export interface StateProps {
     state: AppState;
@@ -11,6 +12,7 @@ export interface StateProps {
 
 export interface DispatchCallbacks {
     newGame(): void;
+    onDealFromDeck(): void;
 }
 
 export function mapStateToProps(state: AppState): StateProps {
@@ -21,7 +23,8 @@ export function mapStateToProps(state: AppState): StateProps {
 
 export function mapDispatchToProps(dispatch: Dispatch<AppState>): DispatchCallbacks {
     return {
-        newGame: () => dispatch(NewGame.execute())
+        newGame: () => dispatch(NewGame.execute()),
+        onDealFromDeck: () => dispatch(DealFromDeck.execute())
     };
 }
 
@@ -40,7 +43,12 @@ export class SolitaireContainer extends React.PureComponent<SolitaireProps, {}> 
         if (this.props.state.gameState == null) {
             return <div>"No Game!"</div>;
         }
-        return <GameBoard game={this.props.state.gameState} />
+        return (
+            <GameBoard 
+                game={this.props.state.gameState}
+                onDealFromDeck={this.props.onDealFromDeck}
+            />
+        )
     }
 }
 
