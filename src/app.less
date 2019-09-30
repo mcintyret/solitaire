@@ -1,10 +1,14 @@
 @card-width: 100px;
 
-.solitaire-card {
-    border-radius: 5px;
+.card-width() {
     width: @card-width;
     min-width: @card-width;
     max-width: @card-width;
+}
+
+.solitaire-card {
+    .card-width();
+    border-radius: 5px;
     height: 150px;
     background-color: white;
     border: 2px solid black;
@@ -25,6 +29,10 @@
     &.-empty {
         border: 2px solid white;
         background-color: transparent;
+    }
+
+    &.-dragging {
+        display: none;
     }
 }
 
@@ -67,6 +75,7 @@
 }
 
 .solitaire-stack {
+    .card-width();
     display: flex;
     flex-direction: column;
 

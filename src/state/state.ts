@@ -1,4 +1,5 @@
 import { Card } from "../model/Card";
+import { Stack } from "../model/Stack";
 
 export interface AppState {
     gameState: GameState | null;
@@ -8,7 +9,7 @@ export interface AppState {
 export interface GameState {
     deckFaceUp: Card[];
     deckFaceDown: Card[];
-    stacks: Card[][];
+    stacks: Stack[];
     homeBase: Array<Card | undefined>;
 }
 

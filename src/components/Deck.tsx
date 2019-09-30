@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Card } from "../model/Card";
+import { Card, Rank, Suit, rankToString } from "../model/Card";
 import { EmptyCard, FaceDownCard, renderCard } from "./Card";
 
 export interface DeckProps {
@@ -14,7 +14,8 @@ export const Deck: React.SFC<DeckProps> = (props: DeckProps) => {
     const faceUp = renderCard(card);
 
     const faceDownProps = {
-        onClick: onDealFromDeck
+        onClick: onDealFromDeck,
+        onDropCard: (rank: Rank, suit: Suit) => alert(`Dropped ${rankToString(rank)} of ${suit}`)
     }
     const faceDown = faceDownCards === 0 ? <EmptyCard {...faceDownProps}/> : <FaceDownCard {...faceDownProps}/>;
 
