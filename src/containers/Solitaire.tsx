@@ -6,6 +6,7 @@ import { NewGame } from "../actions/newGame";
 import { GameBoard } from "../components/GameBoard";
 import { DealFromDeck } from "../actions/dealFromDeck";
 import { AddCardToStack } from "../actions/addCardToStack";
+import { DropCardFromDeck } from "../actions/dropCardFromDeck";
 
 export interface StateProps {
     state: AppState;
@@ -15,6 +16,7 @@ export interface DispatchCallbacks {
     newGame(): void;
     onDealFromDeck(): void;
     addCardToStack(opts: AddCardToStack.Opts): void;
+    onDropCardFromDeck(opts: DropCardFromDeck.Opts): void;
 }
 
 export function mapStateToProps(state: AppState): StateProps {
@@ -27,12 +29,13 @@ export function mapDispatchToProps(dispatch: Dispatch): DispatchCallbacks {
     return {
         newGame: () => dispatch(NewGame.execute()),
         onDealFromDeck: () => dispatch(DealFromDeck.execute()),
-        addCardToStack: (opts: AddCardToStack.Opts) => dispatch(AddCardToStack.execute(opts))
+        addCardToStack: (opts: AddCardToStack.Opts) => dispatch(AddCardToStack.execute(opts)),
+        onDropCardFromDeck: (opts: DropCardFromDeck.Opts) => dispatch(DropCardFromDeck.execute(opts))
     };
 }
 
 export interface SolitaireProps extends StateProps, DispatchCallbacks {
-    
+
 }
 
 export class SolitaireContainer extends React.PureComponent<SolitaireProps, {}> {
@@ -47,12 +50,13 @@ export class SolitaireContainer extends React.PureComponent<SolitaireProps, {}> 
             return <div>"No Game!"</div>;
         }
         return (
-            <GameBoard 
+            <GameBoard
                 game={this.props.state.gameState}
                 onDealFromDeck={this.props.onDealFromDeck}
                 addCardToStack={this.props.addCardToStack}
+                onDropCardFromDeck={this.props.onDropCardFromDeck}
             />
-        )
+        );
     }
 }
 

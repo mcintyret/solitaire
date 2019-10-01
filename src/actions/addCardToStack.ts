@@ -1,4 +1,4 @@
-import { Suit, Rank } from "../model/Card";
+import { Rank, Suit } from "../model/Card";
 
 export namespace AddCardToStack {
     export const TYPE = "ADD_CARD_TO_STACK";
@@ -14,6 +14,6 @@ export namespace AddCardToStack {
     }
 
     export function execute(props: Opts): Action {
-        return {type: TYPE, ...props};
+        return { type: TYPE, ...props };
     }
 }

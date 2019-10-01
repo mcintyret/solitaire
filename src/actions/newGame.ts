@@ -6,6 +6,6 @@ export namespace NewGame {
     }
 
     export function execute(): Action {
-        return {type: TYPE};
+        return { type: TYPE };
     }
 }

@@ -1,4 +1,4 @@
-import { values, shuffle } from "lodash";
+import { values, shuffle } from "lodash-es";
 
 export function isRed(suit: Suit): boolean {
     return suit === "HEARTS" || suit === "DIAMONDS";

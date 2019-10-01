@@ -1,28 +1,56 @@
 import * as React from "react";
-import { Card, Rank, Suit, rankToString } from "../model/Card";
-import { EmptyCard, FaceDownCard, renderCard } from "./Card";
+import { Card } from "../model/Card";
+import { Card as CardElement, EmptyCard, FaceDownCard } from "./Card";
+import { DropCardFromDeck } from "../actions/dropCardFromDeck";
 
 export interface DeckProps {
-    card: Card | undefined;
+    faceUpCard: Card | undefined;
+    faceUpCardBeneath: Card | undefined;
     faceDownCards: number;
     onDealFromDeck(): void;
+    onDropCardFromDeck(opts: DropCardFromDeck.Opts): void;
 }
 
-export const Deck: React.SFC<DeckProps> = (props: DeckProps) => {
-    const { card, faceDownCards, onDealFromDeck } = props;
-    
-    const faceUp = renderCard(card);
+export class Deck extends React.PureComponent<DeckProps> {
+    render() {
+        const { faceDownCards, onDealFromDeck } = this.props;
 
-    const faceDownProps = {
-        onClick: onDealFromDeck,
-        onDropCard: (rank: Rank, suit: Suit) => alert(`Dropped ${rankToString(rank)} of ${suit}`)
+        const faceDownProps = {
+            onClick: onDealFromDeck,
+        };
+        const faceDown = faceDownCards === 0 ? <EmptyCard {...faceDownProps}/> : <FaceDownCard {...faceDownProps}/>;
+
+        return (
+            <div className="solitaire-deck">
+                {this.renderFaceUpCardBeneath()}
+                {this.renderFaceUpCard()}
+                {faceDown}
+            </div>
+        );
     }
-    const faceDown = faceDownCards === 0 ? <EmptyCard {...faceDownProps}/> : <FaceDownCard {...faceDownProps}/>;
 
-    return (
-        <div className="solitaire-deck">
-            {faceUp}
-            {faceDown}
-        </div>
-    );
-}
+    private renderFaceUpCardBeneath() {
+        const { faceUpCardBeneath } = this.props;
+        if (faceUpCardBeneath === undefined) {
+            return <EmptyCard/>;
+        }
+        return (
+            <CardElement
+                card={faceUpCardBeneath}
+            />
+        );
+    }
+
+    private renderFaceUpCard() {
+        const { faceUpCard, onDropCardFromDeck } = this.props;
+        if (faceUpCard === undefined) {
+            return <EmptyCard/>;
+        }
+        return (
+            <CardElement
+                card={faceUpCard}
+                onDrop={onDropCardFromDeck}
+            />
+        );
+    }
+};

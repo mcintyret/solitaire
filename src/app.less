@@ -13,6 +13,8 @@
     background-color: white;
     border: 2px solid black;
     padding: 10px;
+    user-select: none;
+    position: relative;
 
     &.-face-down {
         background-color: blue;
@@ -32,7 +34,8 @@
     }
 
     &.-dragging {
-        display: none;
+        z-index: 1000;
+        background-color: aqua;
     }
 }
 
@@ -42,6 +45,11 @@
     
     .solitaire-card {
         margin-right: 15px;
+
+        &:first-child {
+            position: relative;
+            left: 139px;
+        }
     }
 }
 
@@ -78,8 +86,4 @@
     .card-width();
     display: flex;
     flex-direction: column;
-
-    .solitaire-card {
-        position: relative;
-    }
 }

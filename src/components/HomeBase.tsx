@@ -9,7 +9,13 @@ export interface HomeBaseProps {
 export const HomeBase: React.SFC<HomeBaseProps> = (props: HomeBaseProps) => {
     return (
         <div className="solitaire-home-base">
-            {props.homeBase.map(renderCard)}
+            {props.homeBase.map((card, index) => {
+                const dropTarget = {
+                    type: "homebase" as "homebase",
+                    index
+                };
+                return renderCard(card, { dropTarget });
+            })}
         </div>
     );
 }
