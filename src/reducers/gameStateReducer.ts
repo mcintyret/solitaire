@@ -28,7 +28,8 @@ function handleNewGame(): GameState {
         deckFaceDown: deck,
         deckFaceUp: [],
         stacks,
-        homeBase
+        homeBase,
+        playerHasWon: false
     };
 }
 
@@ -44,10 +45,20 @@ function handleDealFromDeck(state: GameState): GameState {
 
 export type TheGameState = GameState | null;
 
+function checkForWin(state: GameState): GameState {
+    if (state.homeBase.every(card => card && card.rank === 13)) {
+        return {
+            ...state,
+            playerHasWon: true
+        };
+    }
+    return state;
+}
+
 function handleDropCard(state: GameState, action: DropCard.Action): GameState {
     const updated = maybeHandleDropCard(state, action);
     if (updated) {
-        return updateStateWithDropSource(updated, action.dropSource);
+        return checkForWin(updateStateWithDropSource(updated, action.dropSource));
     }
     return state;
 }

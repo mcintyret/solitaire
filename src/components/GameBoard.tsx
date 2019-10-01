@@ -15,6 +15,9 @@ export interface GameBoardProps {
 
 export class GameBoard extends React.PureComponent<GameBoardProps> {
     render() {
+        if (this.props.game.playerHasWon) {
+            alert("Congratulations!");
+        }
         const { game: { deckFaceUp, deckFaceDown, stacks, homeBase }, onDealFromDeck } = this.props;
         const faceUpCard = deckFaceUp[deckFaceUp.length - 1];
         const faceUpCardBeneath = deckFaceUp[deckFaceUp.length - 2];

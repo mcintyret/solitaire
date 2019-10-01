@@ -11,6 +11,7 @@ export interface GameState {
     deckFaceDown: Card[];
     stacks: Stack[];
     homeBase: Array<Card | undefined>;
+    playerHasWon: boolean;
 }
 
 export interface SettingsState {
