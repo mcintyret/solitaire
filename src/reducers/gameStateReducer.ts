@@ -4,8 +4,8 @@ import { Card, newDeck } from "../model/Card";
 import { Stack } from "../model/Stack";
 import { DealFromDeck } from "../actions/dealFromDeck";
 import { reverse } from "lodash";
-import { AddCardToStack } from "../actions/addCardToStack";
-import { DropCardFromDeck } from "../actions/dropCardFromDeck";
+import { DropCard } from "../actions/dropCard";
+import { DropSource, DropTarget } from "../model/drop";
 
 const NUM_STACKS = 7;
 const NUM_HOME_BASES = 4;
@@ -42,18 +42,41 @@ function handleDealFromDeck(state: GameState): GameState {
     return { ...state, deckFaceDown, deckFaceUp };
 }
 
-function handleAddCardToStack(state: GameState, action: AddCardToStack.Action): TheGameState {
-    const { rank, suit, stackIndex } = action;
-    const stacks = [...state.stacks];
-    const cards = [...stacks[stackIndex].cards];
-    cards.push(new Card({ rank, suit }));
-    stacks[stackIndex].cards = cards;
-    return { ...state, stacks };
-}
-
 export type TheGameState = GameState | null;
 
-function handleDropCardFromDeck(state: GameState, action: DropCardFromDeck.Action): GameState {
+function handleDropCard(state: GameState, action: DropCard.Action): GameState {
+    const updated = maybeHandleDropCard(state, action);
+    if (updated) {
+        return updateStateWithDropSource(updated, action.dropSource);
+    }
+    return state;
+}
+
+function updateStateWithDropSource(state: GameState, dropSource: DropSource) {
+    if (dropSource.type === "deck") {
+        return {
+            ...state,
+            deckFaceUp: state.deckFaceUp.slice(0, state.deckFaceUp.length - 1)
+        }
+    } else if (dropSource.type === "stack") {
+        const stack = state.stacks[dropSource.index];
+        const cards = [...stack.cards];
+        cards.pop();
+        const newStack = {
+            cards,
+            faceUpIndex: stack.faceUpIndex - 1
+        };
+        const stacks = [...state.stacks];
+        stacks[dropSource.index] = newStack;
+        return {
+            ...state,
+            stacks
+        };
+    }
+    throw new Error();
+}
+
+function maybeHandleDropCard(state: GameState, action: { card: Card, dropTarget: DropTarget}): GameState | undefined {
     const { type, index } = action.dropTarget;
     if (type === "homebase") {
         const card = state.homeBase[index];
@@ -66,7 +89,6 @@ function handleDropCardFromDeck(state: GameState, action: DropCardFromDeck.Actio
             return {
                 ...state,
                 homeBase,
-                deckFaceUp: state.deckFaceUp.slice(0, state.deckFaceUp.length - 1)
             };
         }
     } else if (type === "stack") {
@@ -85,12 +107,10 @@ function handleDropCardFromDeck(state: GameState, action: DropCardFromDeck.Actio
             return {
                 ...state,
                 stacks,
-                deckFaceUp: state.deckFaceUp.slice(0, state.deckFaceUp.length - 1)
             }
         }
-
     }
-    return state;
+    return undefined;
 }
 
 export function gameState(state: TheGameState = INITIAL_STATE.gameState, action: any): TheGameState {
@@ -99,10 +119,8 @@ export function gameState(state: TheGameState = INITIAL_STATE.gameState, action:
             return handleNewGame();
         case DealFromDeck.TYPE:
             return handleDealFromDeck(state!);
-        case AddCardToStack.TYPE:
-            return handleAddCardToStack(state!, action as AddCardToStack.Action);
-        case DropCardFromDeck.TYPE:
-            return handleDropCardFromDeck(state!, action as DropCardFromDeck.Action);
+        case DropCard.TYPE:
+            return handleDropCard(state!, action as DropCard.Action);
         default:
             return state;
     }

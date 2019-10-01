@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Card } from "../model/Card";
 import { Card as CardElement, EmptyCard, FaceDownCard } from "./Card";
-import { DropCardFromDeck } from "../actions/dropCardFromDeck";
+import { DropTarget } from "../model/drop";
 
 export interface DeckProps {
     faceUpCard: Card | undefined;
     faceUpCardBeneath: Card | undefined;
     faceDownCards: number;
     onDealFromDeck(): void;
-    onDropCardFromDeck(opts: DropCardFromDeck.Opts): void;
+    onDropCardFromDeck(card: Card, dropTarget: DropTarget): void;
 }
 
 export class Deck extends React.PureComponent<DeckProps> {

@@ -1,12 +1,7 @@
 import * as React from "react";
 import { Card as ModelCard, isRed, rankToString } from "../model/Card";
 import * as classNames from "classnames";
-import { DropCardFromDeck } from "../actions/dropCardFromDeck";
-
-export interface DropTarget {
-    type: "homebase" | "stack",
-    index: number;
-}
+import { DropTarget } from "../model/drop";
 
 export interface BaseCardProps {
     topOffset?: number;
@@ -16,7 +11,7 @@ export interface BaseCardProps {
 
 export interface CardProps extends BaseCardProps {
     card: ModelCard;
-    onDrop?(opts: DropCardFromDeck.Opts): void;
+    onDrop?(card: ModelCard, dropTarget: DropTarget): void;
 }
 
 interface State {
@@ -78,7 +73,7 @@ export class Card extends React.PureComponent<CardProps, State> {
         const target = document.elementsFromPoint(evt.pageX, evt.pageY)[1] as HTMLElement;
         const dropTarget: DropTarget | undefined = target.dataset.droptarget && JSON.parse(target.dataset.droptarget);
         const { onDrop, card } = this.props;
-        dropTarget && onDrop && onDrop({ card, dropTarget });
+        dropTarget && onDrop && onDrop(card, dropTarget);
     };
 
     private handleMouseMove = (evt: React.MouseEvent) => {

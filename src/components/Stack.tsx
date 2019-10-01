@@ -1,12 +1,13 @@
 import * as React from "react";
-import { Card, Rank, Suit } from "../model/Card";
+import { Card } from "../model/Card";
 import { Card as CardElement, EmptyCard, FaceDownCard } from "./Card";
 import { Stack as ModelStack } from "../model/Stack";
+import { DropTarget } from "../model/drop";
 
 export interface StackProps {
     stack: ModelStack;
     index: number;
-    addCardToStack(rank: Rank, suit: Suit): void;
+    onDropCardFromStack(card: Card, dropTarget: DropTarget): void;
 }
 
 const HEIGHT_OFFSET_PER_CARD = 110;
@@ -25,8 +26,9 @@ export class Stack extends React.PureComponent<StackProps, {}> {
                 dropTarget={{
                     type: "stack", index: this.props.index
                 }}
+                onDrop={this.props.onDropCardFromStack}
                 card={card}
-            />
+            />;
     };
 
     render() {
@@ -34,7 +36,9 @@ export class Stack extends React.PureComponent<StackProps, {}> {
 
         return (
             <div className="solitaire-stack">
-                {cards.length === 0 && <EmptyCard/>}
+                {cards.length === 0 && <EmptyCard dropTarget={{
+                    type: "stack", index: this.props.index
+                }}/>}
                 {cards.map(this.renderCard)}
             </div>
         );

@@ -1,12 +1,13 @@
 import { Card } from "../model/Card";
-import { DropTarget } from "../components/Card";
+import { DropSource, DropTarget } from "../model/drop";
 
-export namespace DropCardFromDeck {
-    export const TYPE = "DROP_CARD_FROM_DECK";
+export namespace DropCard {
+    export const TYPE = "DROP_CARD";
 
     export interface Opts {
         card: Card;
         dropTarget: DropTarget;
+        dropSource: DropSource;
     }
 
     export interface Action extends Opts{

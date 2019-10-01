@@ -3,20 +3,19 @@ import { Stack } from "./Stack";
 import { GameState } from "../state/state";
 import { HomeBase } from "./HomeBase";
 import { Deck } from "./Deck";
-import { AddCardToStack } from "../actions/addCardToStack";
-import { Rank, Suit } from "../model/Card";
-import { DropCardFromDeck } from "../actions/dropCardFromDeck";
+import { DropCard } from "../actions/dropCard";
+import { Card } from "../model/Card";
+import { DropTarget } from "../model/drop";
 
 export interface GameBoardProps {
     game: GameState;
     onDealFromDeck(): void;
-    addCardToStack(opts: AddCardToStack.Opts): void;
-    onDropCardFromDeck(opts: DropCardFromDeck.Opts): void;
+    onDropCard(opts: DropCard.Opts): void;
 }
 
 export class GameBoard extends React.PureComponent<GameBoardProps> {
     render() {
-        const { game: { deckFaceUp, deckFaceDown, stacks, homeBase }, onDealFromDeck, addCardToStack, onDropCardFromDeck } = this.props;
+        const { game: { deckFaceUp, deckFaceDown, stacks, homeBase }, onDealFromDeck } = this.props;
         const faceUpCard = deckFaceUp[deckFaceUp.length - 1];
         const faceUpCardBeneath = deckFaceUp[deckFaceUp.length - 2];
 
@@ -29,7 +28,7 @@ export class GameBoard extends React.PureComponent<GameBoardProps> {
                         faceUpCardBeneath={faceUpCardBeneath}
                         faceDownCards={deckFaceDown.length}
                         onDealFromDeck={onDealFromDeck}
-                        onDropCardFromDeck={onDropCardFromDeck}
+                        onDropCardFromDeck={this.handleDropCardFromDeck}
                     />
                 </div>
                 <div className="solitaire-game-main">
@@ -37,11 +36,29 @@ export class GameBoard extends React.PureComponent<GameBoardProps> {
                         <Stack
                             stack={stack}
                             index={i}
-                            addCardToStack={(rank: Rank, suit: Suit) => addCardToStack({ suit, rank, stackIndex: i })}
+                            onDropCardFromStack={this.handleDropCardFromStack(i)}
                         />
                     ))}
                 </div>
             </div>
         );
+    }
+
+    private handleDropCardFromDeck = (card: Card, dropTarget: DropTarget) => {
+        this.props.onDropCard({
+            card,
+            dropTarget,
+            dropSource: { type: "deck" }
+        });
+    }
+
+    private handleDropCardFromStack(index: number) {
+        return (card: Card, dropTarget: DropTarget) => {
+            this.props.onDropCard({
+                card,
+                dropTarget,
+                dropSource: { type: "stack", index }
+            });
+        }
     }
 }
